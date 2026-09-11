@@ -1,48 +1,138 @@
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import i18n from "../i18n";
 import "./CreateBuilding.css";
 
 function CreateBuilding() {
+  const { t } = useTranslation();
+
+  const isArabic = i18n.language === "ar";
+
+  const [formData, setFormData] = useState({
+    buildingName: "",
+    address: "",
+    city: "",
+    numberOfFloors: "",
+    numberOfApartments: "",
+    contactPhone: "",
+    email: "",
+    fullName: "",
+    idNumber: "",
+    mobileNumber: ""
+  });
+
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleChange = (event) => {
+  const { name, value } = event.target;
+
+  setFormData((previousData) => ({
+    ...previousData,
+    [name]: value
+  }));
+};
+
+const handleSubmit = async (event) => {
+  event.preventDefault();
+
+  const floors = Number(formData.numberOfFloors);
+const apartments = Number(formData.numberOfApartments);
+
+if (!Number.isInteger(floors) || floors < 0) {
+  setError(t("invalidFloors"));
+  setMessage("");
+  return;
+}
+
+if (!Number.isInteger(apartments) || apartments < 0) {
+  setError(t("invalidApartments"));
+  setMessage("");
+  return;
+}
+
+  setMessage("");
+  setError("");
+  setIsSubmitting(true);
+
+  try {
+    const response = await fetch(
+  `${import.meta.env.VITE_API_URL}/setup/initial`,
+  {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        ...formData,
+        numberOfFloors: Number(formData.numberOfFloors),
+        numberOfApartments: Number(formData.numberOfApartments)
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+  if (response.status === 400) {
+    throw new Error(t("setupAlreadyCompleted"));
+  }
+
+  throw new Error(data.message || "Something went wrong.");
+}
+
+    setMessage(data.message);
+  } catch (submitError) {
+    setError(submitError.message);
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
   return (
-    <div className="setup-page">
+    <div
+      className="setup-page"
+      dir={isArabic ? "rtl" : "ltr"}
+    >
       {/* Header */}
       <header className="setup-header">
         <div className="header-inner">
           <div className="brand">
             <div className="brand-icon">
-              <span className="material-symbols-outlined">domain</span>
+              <span className="material-symbols-outlined">
+                domain
+              </span>
             </div>
 
             <div className="brand-content">
-              <span className="brand-name">HOA Management Portal</span>
-              <span className="setup-badge">Admin Setup</span>
+              <span className="brand-name">
+                {t("brandName")}
+              </span>
+
+              <span className="setup-badge">
+                {t("adminSetup")}
+              </span>
             </div>
           </div>
 
           <div className="header-actions">
             <div className="language-switcher">
               <button
-                type="button"
-                className="language-active"
-              >
-                EN
-              </button>
+  type="button"
+  className={!isArabic ? "language-active" : ""}
+  onClick={() => i18n.changeLanguage("en")}
+>
+  {isArabic ? "الإنجليزية" : "EN"}
+</button>
 
-              <button type="button">
-                AR
-              </button>
+<button
+  type="button"
+  className={isArabic ? "language-active" : ""}
+  onClick={() => i18n.changeLanguage("ar")}
+>
+  {isArabic ? "العربية" : "AR"}
+</button>
             </div>
-
-            <div className="header-divider" />
-
-            <button
-              type="button"
-              className="support-button"
-            >
-              <span className="material-symbols-outlined">
-                help_outline
-              </span>
-
-              <span>Support</span>
-            </button>
           </div>
         </div>
       </header>
@@ -59,35 +149,35 @@ function CreateBuilding() {
                   flag
                 </span>
 
-                Initial Setup
+                {t("initialSetup")}
               </strong>
 
               <span>•</span>
 
               <span className="step-badge">
-                Step 1 of 1
+                {t("stepOf", {
+                  current: 1,
+                  total: 1
+                })}
               </span>
             </div>
 
             <div className="secure-status">
               <span />
 
-              Secure Setup
+              {t("secureSetup")}
             </div>
           </div>
 
           {/* Page heading */}
           <div className="page-heading">
-            <h1>Create Your Building</h1>
+            <h1>{t("createYourBuilding")}</h1>
 
-            <p>
-              Set up your building and create your Super Admin account
-              to get started.
-            </p>
+            <p>{t("createBuildingSubtitle")}</p>
           </div>
 
           {/* Form */}
-          <form className="setup-form">
+          <form className="setup-form" onSubmit={handleSubmit}>
 
             {/* Building Information */}
             <section className="form-card">
@@ -99,10 +189,12 @@ function CreateBuilding() {
                 </div>
 
                 <div>
-                  <h2>Building Information</h2>
+                  <h2>
+                    {t("buildingInformation")}
+                  </h2>
 
                   <p>
-                    Enter the physical and capacity details of the property.
+                    {t("buildingInformationDescription")}
                   </p>
                 </div>
               </div>
@@ -114,7 +206,8 @@ function CreateBuilding() {
 
                   <div className="form-field">
                     <label htmlFor="buildingName">
-                      Building Name <span>*</span>
+                      {t("buildingName")}{" "}
+                      <span>*</span>
                     </label>
 
                     <div className="input-wrapper">
@@ -122,19 +215,22 @@ function CreateBuilding() {
                         corporate_fare
                       </span>
 
-                      <input
-                        id="buildingName"
-                        name="buildingName"
-                        type="text"
-                        placeholder="e.g., Oceanview Tower"
-                        required
-                      />
+                     <input
+  id="buildingName"
+  name="buildingName"
+  type="text"
+  value={formData.buildingName}
+  onChange={handleChange}
+  placeholder={t("buildingNamePlaceholder")}
+  required
+/>
                     </div>
                   </div>
 
                   <div className="form-field">
                     <label htmlFor="city">
-                      City <span>*</span>
+                      {t("city")}{" "}
+                      <span>*</span>
                     </label>
 
                     <div className="input-wrapper">
@@ -143,12 +239,14 @@ function CreateBuilding() {
                       </span>
 
                       <input
-                        id="city"
-                        name="city"
-                        type="text"
-                        placeholder="e.g., Cairo"
-                        required
-                      />
+  id="city"
+  name="city"
+  type="text"
+  value={formData.city}
+  onChange={handleChange}
+  placeholder={t("cityPlaceholder")}
+  required
+/>
                     </div>
                   </div>
 
@@ -157,7 +255,8 @@ function CreateBuilding() {
                 {/* Address */}
                 <div className="form-field">
                   <label htmlFor="address">
-                    Address <span>*</span>
+                    {t("address")}{" "}
+                    <span>*</span>
                   </label>
 
                   <div className="input-wrapper">
@@ -166,12 +265,14 @@ function CreateBuilding() {
                     </span>
 
                     <input
-                      id="address"
-                      name="address"
-                      type="text"
-                      placeholder="e.g., 14 El-Tahrir St., Zamalek"
-                      required
-                    />
+  id="address"
+  name="address"
+  type="text"
+  value={formData.address}
+  onChange={handleChange}
+  placeholder={t("addressPlaceholder")}
+  required
+/>
                   </div>
                 </div>
 
@@ -180,7 +281,8 @@ function CreateBuilding() {
 
                   <div className="form-field">
                     <label htmlFor="numberOfFloors">
-                      Number of Floors <span>*</span>
+                      {t("numberOfFloors")}{" "}
+                      <span>*</span>
                     </label>
 
                     <div className="input-wrapper">
@@ -189,23 +291,26 @@ function CreateBuilding() {
                       </span>
 
                       <input
-                        id="numberOfFloors"
-                        name="numberOfFloors"
-                        type="number"
-                        min="0"
-                        placeholder="e.g., 12"
-                        required
-                      />
+  id="numberOfFloors"
+  name="numberOfFloors"
+  type="number"
+  min="0"
+  value={formData.numberOfFloors}
+  onChange={handleChange}
+  placeholder={t("floorsPlaceholder")}
+  required
+/>
                     </div>
 
                     <small>
-                      Can be set to 0 initially if configuring later.
+                      {t("floorsNote")}
                     </small>
                   </div>
 
                   <div className="form-field">
                     <label htmlFor="numberOfApartments">
-                      Number of Apartments <span>*</span>
+                      {t("numberOfApartments")}{" "}
+                      <span>*</span>
                     </label>
 
                     <div className="input-wrapper">
@@ -214,17 +319,19 @@ function CreateBuilding() {
                       </span>
 
                       <input
-                        id="numberOfApartments"
-                        name="numberOfApartments"
-                        type="number"
-                        min="0"
-                        placeholder="e.g., 48"
-                        required
-                      />
+  id="numberOfApartments"
+  name="numberOfApartments"
+  type="number"
+  min="0"
+  value={formData.numberOfApartments}
+  onChange={handleChange}
+  placeholder={t("apartmentsPlaceholder")}
+  required
+/>
                     </div>
 
                     <small>
-                      Can be set to 0 initially if units are unassigned.
+                      {t("apartmentsNote")}
                     </small>
                   </div>
 
@@ -239,17 +346,21 @@ function CreateBuilding() {
                         contact_phone
                       </span>
 
-                      Optional Building Contact Information
+                      {t(
+                        "optionalBuildingContactInformation"
+                      )}
                     </strong>
 
-                    <span>Optional</span>
+                    <span>
+                      {t("optional")}
+                    </span>
                   </div>
 
                   <div className="form-grid">
 
                     <div className="form-field">
                       <label htmlFor="contactPhone">
-                        Contact Phone
+                        {t("contactPhone")}
                       </label>
 
                       <div className="input-wrapper">
@@ -257,18 +368,24 @@ function CreateBuilding() {
                           call
                         </span>
 
-                        <input
-                          id="contactPhone"
-                          name="contactPhone"
-                          type="tel"
-                          placeholder="e.g., +20 100 123 4567"
-                        />
+                       <input
+  id="contactPhone"
+  name="contactPhone"
+  type="tel"
+  dir={isArabic ? "rtl" : "ltr"}
+  style={{
+    textAlign: isArabic ? "right" : "left"
+  }}
+  value={formData.contactPhone}
+  onChange={handleChange}
+  placeholder={t("contactPhonePlaceholder")}
+/>
                       </div>
                     </div>
 
                     <div className="form-field">
                       <label htmlFor="email">
-                        Email
+                        {t("email")}
                       </label>
 
                       <div className="input-wrapper">
@@ -276,12 +393,15 @@ function CreateBuilding() {
                           mail
                         </span>
 
-                        <input
-                          id="email"
-                          name="email"
-                          type="email"
-                          placeholder="e.g., management@oceanview.com"
-                        />
+                       <input
+  id="email"
+  name="email"
+  type="email"
+  dir={isArabic ? "rtl" : "ltr"}
+  value={formData.email}
+  onChange={handleChange}
+  placeholder={t("emailPlaceholder")}
+/>
                       </div>
                     </div>
 
@@ -301,11 +421,12 @@ function CreateBuilding() {
                 </div>
 
                 <div>
-                  <h2>Create Super Admin Account</h2>
+                  <h2>
+                    {t("createSuperAdminAccount")}
+                  </h2>
 
                   <p>
-                    Your account will have Super Admin access to manage
-                    the building.
+                    {t("superAdminDescription")}
                   </p>
                 </div>
               </div>
@@ -317,7 +438,8 @@ function CreateBuilding() {
 
                   <div className="form-field">
                     <label htmlFor="fullName">
-                      Full Name <span>*</span>
+                      {t("fullName")}{" "}
+                      <span>*</span>
                     </label>
 
                     <div className="input-wrapper">
@@ -326,18 +448,21 @@ function CreateBuilding() {
                       </span>
 
                       <input
-                        id="fullName"
-                        name="fullName"
-                        type="text"
-                        placeholder="e.g., Tamer Mansour"
-                        required
-                      />
+  id="fullName"
+  name="fullName"
+  type="text"
+  value={formData.fullName}
+  onChange={handleChange}
+  placeholder={t("fullNamePlaceholder")}
+  required
+/>
                     </div>
                   </div>
 
                   <div className="form-field">
                     <label htmlFor="idNumber">
-                      ID Number <span>*</span>
+                      {t("idNumber")}{" "}
+                      <span>*</span>
                     </label>
 
                     <div className="input-wrapper">
@@ -346,12 +471,15 @@ function CreateBuilding() {
                       </span>
 
                       <input
-                        id="idNumber"
-                        name="idNumber"
-                        type="text"
-                        placeholder="e.g., 29001011234567"
-                        required
-                      />
+  id="idNumber"
+  name="idNumber"
+  type="text"
+  dir="ltr"
+  value={formData.idNumber}
+  onChange={handleChange}
+  placeholder={t("idNumberPlaceholder")}
+  required
+/>
                     </div>
                   </div>
 
@@ -360,7 +488,8 @@ function CreateBuilding() {
                 {/* Mobile */}
                 <div className="form-field">
                   <label htmlFor="mobileNumber">
-                    Mobile Number <span>*</span>
+                    {t("mobileNumber")}{" "}
+                    <span>*</span>
                   </label>
 
                   <div className="input-wrapper">
@@ -368,13 +497,19 @@ function CreateBuilding() {
                       smartphone
                     </span>
 
-                    <input
-                      id="mobileNumber"
-                      name="mobileNumber"
-                      type="tel"
-                      placeholder="e.g., +20 10 1234 5678"
-                      required
-                    />
+                 <input
+  id="mobileNumber"
+  name="mobileNumber"
+  type="tel"
+  dir={isArabic ? "rtl" : "ltr"}
+  style={{
+    textAlign: isArabic ? "right" : "left"
+  }}
+  value={formData.mobileNumber}
+  onChange={handleChange}
+  placeholder={t("mobileNumberPlaceholder")}
+  required
+/>
                   </div>
 
                   <div className="otp-note">
@@ -383,8 +518,7 @@ function CreateBuilding() {
                     </span>
 
                     <p>
-                      Used to receive your login OTP via WhatsApp.
-                      No password creation required.
+                      {t("otpNote")}
                     </p>
                   </div>
                 </div>
@@ -392,45 +526,39 @@ function CreateBuilding() {
               </div>
             </section>
 
-            {/* Required fields note */}
-            <div className="required-note">
-              <span>*</span> Indicates mandatory fields.
-            </div>
+           {/* Required fields note */}
+<div className="required-note">
+  <span>*</span>{" "}
+  {t("requiredFieldsNote")}
+
+  {message && <p>{message}</p>}
+  {error && <p>{error}</p>}
+</div>
 
             {/* Actions */}
             <div className="form-actions">
-
               <button
-                type="button"
-                className="support-link"
-              >
-                <span className="material-symbols-outlined">
-                  support_agent
-                </span>
+  type="submit"
+  className="create-button"
+  disabled={isSubmitting}
+>
+  <span>
+    {isSubmitting ? t("creating") : t("createBuilding")}
+  </span>
 
-                Need assistance? Contact Support
-              </button>
-
-              <button
-                type="submit"
-                className="create-button"
-              >
-                <span>Create Building</span>
-
-                <span className="material-symbols-outlined">
-                  arrow_forward
-                </span>
-              </button>
-
+  <span className="material-symbols-outlined">
+    arrow_forward
+  </span>
+</button>
             </div>
-          </form>
 
+          </form>
         </div>
       </main>
 
       {/* Footer */}
       <footer className="setup-footer">
-        © {new Date().getFullYear()} HOA Management Portal. All rights reserved.
+        {t("footer")}
       </footer>
     </div>
   );
