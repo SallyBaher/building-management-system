@@ -1,5 +1,14 @@
 import pool from "../db/pool.js";
 import { ACCESS_LEVELS } from "../config/accessLevels.js";
+import { hashPassword } from "./passwordService.js";
+import {
+  getExistingBuilding,
+  getExistingSuperAdmin,
+  insertBuilding,
+  insertSuperAdmin,
+  findInitialBuilding,
+  findBuildingInformation
+} from "../repositories/buildingRepository.js";
 
 export class InitialBuildingSetupError extends Error {
   constructor(message) {
@@ -51,7 +60,9 @@ export async function createInitialBuildingSetup({
   email,
   fullName,
   idNumber,
-  mobileNumber
+  mobileNumber,
+  username,
+  password
 } = {}) {
   const building = {
     name: requireString(buildingName, "Building name"),
@@ -68,11 +79,15 @@ export async function createInitialBuildingSetup({
     contactPhone: optionalString(contactPhone, "Contact phone"),
     email: optionalString(email, "Email")
   };
+
   const superAdmin = {
     fullName: requireString(fullName, "Full name"),
     idNumber: requireString(idNumber, "ID number"),
-    mobileNumber: requireString(mobileNumber, "Mobile number")
+    mobileNumber: requireString(mobileNumber, "Mobile number"),
+    username: requireString(username, "Username"),
+    password: requireString(password, "Password")
   };
+  const passwordHash = await hashPassword(superAdmin.password);
 
   const client = await pool.connect();
 
@@ -84,72 +99,39 @@ export async function createInitialBuildingSetup({
       'LOCK TABLE "BUILDING", "ACCOUNT" IN SHARE ROW EXCLUSIVE MODE'
     );
 
-    const existingBuilding = await client.query(
-      'SELECT 1 FROM "BUILDING" LIMIT 1'
-    );
+    const buildingAlreadyExists = await getExistingBuilding(client);
 
-    if (existingBuilding.rowCount > 0) {
+    if (buildingAlreadyExists) {
       throw new InitialBuildingSetupError(
         "Initial building setup has already been completed."
       );
     }
 
-    const existingSuperAdmin = await client.query(
-      `SELECT 1
-       FROM "ACCOUNT"
-       WHERE "AccessLevel" = $1
-       LIMIT 1`,
-      [ACCESS_LEVELS.SUPER_ADMIN]
+    const superAdminAlreadyExists = await getExistingSuperAdmin(
+      client,
+      ACCESS_LEVELS.SUPER_ADMIN
     );
 
-    if (existingSuperAdmin.rowCount > 0) {
+    if (superAdminAlreadyExists) {
       throw new InitialBuildingSetupError(
         "A Super Admin account already exists."
       );
     }
 
-    const buildingResult = await client.query(
-      `INSERT INTO "BUILDING"
-       (
-         "Name",
-         "Address",
-         "City",
-         "NumberOfFloors",
-         "NumberOfApartments",
-         "ContactPhone",
-         "Email"
-       )
-       VALUES ($1, $2, $3, $4, $5, $6, $7)
-       RETURNING "BuildingID"`,
-      [
-        building.name,
-        building.address,
-        building.city,
-        building.numberOfFloors,
-        building.numberOfApartments,
-        building.contactPhone,
-        building.email
-      ]
-    );
+    const buildingResult = await insertBuilding(client, building);
 
-    const accountResult = await client.query(
-      `INSERT INTO "ACCOUNT"
-       ("FullName", "IDNumber", "MobileNumber", "AccessLevel", "IsActive")
-       VALUES ($1, $2, $3, $4, TRUE)
-       RETURNING "AccountID"`,
-      [
-        superAdmin.fullName,
-        superAdmin.idNumber,
-        superAdmin.mobileNumber,
-        ACCESS_LEVELS.SUPER_ADMIN
-      ]
+    const accountResult = await insertSuperAdmin(
+      client,
+      superAdmin,
+      passwordHash,
+      ACCESS_LEVELS.SUPER_ADMIN
     );
 
     await client.query("COMMIT");
 
     return {
-      buildingId: buildingResult.rows[0].BuildingID,
-      accountId: accountResult.rows[0].AccountID
+      buildingId: buildingResult.BuildingID,
+      accountId: accountResult.AccountID
     };
   } catch (error) {
     await client.query("ROLLBACK");
@@ -160,14 +142,21 @@ export async function createInitialBuildingSetup({
 }
 
 export async function getInitialSetupStatus() {
-  const result = await pool.query(
-    `SELECT EXISTS (
-       SELECT 1
-       FROM "BUILDING"
-     ) AS "isInitialized"`
-  );
+  const isInitialized = await findInitialBuilding();
 
   return {
-    isInitialized: result.rows[0].isInitialized
+    isInitialized
   };
+}
+
+export async function getBuildingInformation() {
+  const building = await findBuildingInformation();
+
+  if (!building) {
+    throw new InitialBuildingSetupError(
+      "No building has been created yet."
+    );
+  }
+
+  return building;
 }

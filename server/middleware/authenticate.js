@@ -1,6 +1,6 @@
 import "dotenv/config";
 import jwt from "jsonwebtoken";
-import pool from "../db/pool.js";
+import { findAuthenticationAccountById } from "../repositories/accountRepository.js";
 
 function getBearerToken(authorizationHeader) {
   if (!authorizationHeader) {
@@ -35,14 +35,7 @@ export default async function authenticate(req, res, next) {
   }
 
   try {
-    const result = await pool.query(
-      `SELECT "AccountID", "AccessLevel", "IsActive"
-       FROM "ACCOUNT"
-       WHERE "AccountID" = $1`,
-      [payload.accountId]
-    );
-
-    const account = result.rows[0];
+    const account = await findAuthenticationAccountById(payload.accountId);
 
     if (!account || account.IsActive !== true) {
       return res.status(401).json({ message: "This account is inactive or unavailable." });

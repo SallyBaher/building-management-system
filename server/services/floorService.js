@@ -1,4 +1,7 @@
-import pool from "../db/pool.js";
+import {
+  findBuildingById,
+  insertFloor
+} from "../repositories/floorRepository.js";
 
 export class FloorServiceError extends Error {
   constructor(message) {
@@ -25,30 +28,14 @@ export async function createFloor({
 
   const name = requireString(floorName, "Floor name");
 
-  const client = await pool.connect();
+  const building = await findBuildingById(buildingId);
 
-  try {
-    const buildingResult = await client.query(
-      `SELECT "BuildingID"
-       FROM "BUILDING"
-       WHERE "BuildingID" = $1`,
-      [buildingId]
-    );
-
-    if (buildingResult.rowCount === 0) {
-      throw new FloorServiceError("Building not found.");
-    }
-
-    const result = await client.query(
-      `INSERT INTO "FLOOR"
-       ("BuildingID", "FloorName")
-       VALUES ($1, $2)
-       RETURNING "FloorID", "BuildingID", "FloorName"`,
-      [buildingId, name]
-    );
-
-    return result.rows[0];
-  } finally {
-    client.release();
+  if (!building) {
+    throw new FloorServiceError("Building not found.");
   }
+
+  return insertFloor({
+    buildingId,
+    floorName: name
+  });
 }

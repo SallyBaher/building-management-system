@@ -51,13 +51,14 @@ const resources = {
       fullName: "Full Name",
       idNumber: "ID Number",
       mobileNumber: "Mobile Number",
+      username: "Username",
+      password: "Password",
 
       fullNamePlaceholder: "e.g., Tamer Mansour",
       idNumberPlaceholder: "e.g., 29001011234567",
       mobileNumberPlaceholder: "e.g., +20 10 1234 5678",
-
-      otpNote:
-        "Used to receive your login OTP via WhatsApp. No password creation required.",
+      usernamePlaceholder: "Choose a username",
+      passwordPlaceholder: "Enter a password",
 
       requiredFieldsNote: "Indicates mandatory fields.",
 
@@ -131,13 +132,14 @@ footer: "© 2026 SBM. All rights reserved.",
       fullName: "الاسم الكامل",
       idNumber: "رقم الهوية",
       mobileNumber: "رقم الهاتف المحمول",
+      username: "اسم المستخدم",
+      password: "كلمة المرور",
 
       fullNamePlaceholder: "مثال: تامر منصور",
       idNumberPlaceholder: "مثال: 29001011234567",
      mobileNumberPlaceholder: "مثال: ‎+20 10 1234 5678‎",
-
-      otpNote:
-        "سيُستخدم لاستلام رمز الدخول لمرة واحدة عبر واتساب. لا حاجة لإنشاء كلمة مرور.",
+      usernamePlaceholder: "اختر اسم مستخدم",
+      passwordPlaceholder: "أدخل كلمة المرور",
 
       requiredFieldsNote: "تشير إلى الحقول الإلزامية.",
 
@@ -156,8 +158,8 @@ encryptedSetup: "إعداد مشفر بتقنية 256 بت",
 
 footer: "© 2026 إس بي إم. جميع الحقوق محفوظة.",
 
-      english: "EN",
-      arabic: "AR"
+      english: "الإنجليزية",
+arabic: "العربية",
     }
   }
 };

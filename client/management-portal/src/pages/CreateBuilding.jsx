@@ -18,7 +18,9 @@ function CreateBuilding() {
     email: "",
     fullName: "",
     idNumber: "",
-    mobileNumber: ""
+    mobileNumber: "",
+    username: "",
+    password: ""
   });
 
   const [message, setMessage] = useState("");
@@ -118,20 +120,20 @@ if (!Number.isInteger(apartments) || apartments < 0) {
           <div className="header-actions">
             <div className="language-switcher">
               <button
-  type="button"
-  className={!isArabic ? "language-active" : ""}
-  onClick={() => i18n.changeLanguage("en")}
->
-  {isArabic ? "الإنجليزية" : "EN"}
-</button>
+                type="button"
+                className={!isArabic ? "language-active" : ""}
+                onClick={() => i18n.changeLanguage("en")}
+              >
+                {t("english")}
+              </button>
 
-<button
-  type="button"
-  className={isArabic ? "language-active" : ""}
-  onClick={() => i18n.changeLanguage("ar")}
->
-  {isArabic ? "العربية" : "AR"}
-</button>
+              <button
+                type="button"
+                className={isArabic ? "language-active" : ""}
+                onClick={() => i18n.changeLanguage("ar")}
+              >
+                {t("arabic")}
+              </button>
             </div>
           </div>
         </div>
@@ -162,11 +164,7 @@ if (!Number.isInteger(apartments) || apartments < 0) {
               </span>
             </div>
 
-            <div className="secure-status">
-              <span />
-
-              {t("secureSetup")}
-            </div>
+            
           </div>
 
           {/* Page heading */}
@@ -512,14 +510,56 @@ if (!Number.isInteger(apartments) || apartments < 0) {
 />
                   </div>
 
-                  <div className="otp-note">
-                    <span className="material-symbols-outlined">
-                      chat
-                    </span>
+                </div>
 
-                    <p>
-                      {t("otpNote")}
-                    </p>
+                {/* Login credentials */}
+                <div className="form-grid">
+                  <div className="form-field">
+                    <label htmlFor="username">
+                      {t("username")} {" "}
+                      <span>*</span>
+                    </label>
+
+                    <div className="input-wrapper">
+                      <span className="material-symbols-outlined">
+                        person
+                      </span>
+
+                      <input
+                        id="username"
+                        name="username"
+                        type="text"
+                        value={formData.username}
+                        onChange={handleChange}
+                        placeholder={t("usernamePlaceholder")}
+                        autoComplete="username"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-field">
+                    <label htmlFor="password">
+                      {t("password")} {" "}
+                      <span>*</span>
+                    </label>
+
+                    <div className="input-wrapper">
+                      <span className="material-symbols-outlined">
+                        lock
+                      </span>
+
+                      <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        placeholder={t("passwordPlaceholder")}
+                        autoComplete="new-password"
+                        required
+                      />
+                    </div>
                   </div>
                 </div>
 
