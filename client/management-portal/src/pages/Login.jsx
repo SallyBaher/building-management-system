@@ -7,7 +7,9 @@ function Login() {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const [language, setLanguage] = useState("en");
+  const [language, setLanguage] = useState(
+  () => localStorage.getItem("language") || "en"
+);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -104,7 +106,10 @@ function Login() {
       <button
   type="button"
   className={language === "en" ? "active" : ""}
-  onClick={() => setLanguage("en")}
+  onClick={() => {
+  setLanguage("en");
+  localStorage.setItem("language", "en");
+}}
 >
   {isArabic ? "الإنجليزية" : "EN"}
 </button>
@@ -112,7 +117,10 @@ function Login() {
 <button
   type="button"
   className={language === "ar" ? "active" : ""}
-  onClick={() => setLanguage("ar")}
+  onClick={() => {
+  setLanguage("ar");
+  localStorage.setItem("language", "ar");
+}}
 >
   {isArabic ? "العربية" : "AR"}
 </button>
