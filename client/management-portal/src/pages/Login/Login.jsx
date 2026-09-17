@@ -1,15 +1,14 @@
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
 
 function Login() {
-  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const [language, setLanguage] = useState(
-  () => localStorage.getItem("language") || "en"
-);
+    () => localStorage.getItem("language") || "en"
+  );
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -29,9 +28,11 @@ function Login() {
       invalidCredentials:
         "Invalid credentials. Please verify your username and password.",
       managementLogin: "Management Login",
-      copyright:
-        "© 2026 SBM. All rights reserved.",
+      copyright: "© 2026 SBM. All rights reserved.",
+      showPassword: "Show password",
+      hidePassword: "Hide password",
     },
+
     ar: {
       portalTitle: "بوابة الإدارة",
       description:
@@ -44,10 +45,17 @@ function Login() {
       managementLogin: "تسجيل الدخول للإدارة",
       copyright:
         "© 2026 إس بي إم. جميع الحقوق محفوظة.",
+      showPassword: "إظهار كلمة المرور",
+      hidePassword: "إخفاء كلمة المرور",
     },
   };
 
   const currentText = text[language];
+
+  const handleLanguageChange = (newLanguage) => {
+    localStorage.setItem("language", newLanguage);
+    setLanguage(newLanguage);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -56,77 +64,87 @@ function Login() {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username,
-          password,
-        }),
-      });
+      const response = await fetch(
+        "http://localhost:5000/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username,
+            password,
+          }),
+        }
+      );
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || currentText.invalidCredentials);
+        throw new Error(
+          data.message || currentText.invalidCredentials
+        );
       }
 
       localStorage.setItem("token", data.token);
+
       navigate("/building-information");
     } catch (submitError) {
-      setError(submitError.message || currentText.invalidCredentials);
+      setError(
+        submitError.message || currentText.invalidCredentials
+      );
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className={`login-page ${isArabic ? "login-rtl" : ""}`}>
+    <div
+      className={`login-page ${isArabic ? "login-rtl" : ""}`}
+      dir={isArabic ? "rtl" : "ltr"}
+    >
       <header className="login-header">
-  <div className="login-header-inner">
-    <div className="login-brand">
-      <div className="login-brand-icon">
-        <span className="material-symbols-outlined">
-          apartment
-        </span>
-      </div>
+        <div className="login-header-inner">
+          <div className="login-brand">
+            <div className="login-brand-icon">
+              <span className="material-symbols-outlined">
+                apartment
+              </span>
+            </div>
 
-      <div className="login-brand-name">
-  {isArabic ? "إدارة المباني الذكية" : "Smart Block Management"}
-</div>
+            <div className="login-brand-name">
+              {isArabic
+                ? "إدارة المباني الذكية"
+                : "Smart Block Management"}
+            </div>
 
-      <span className="login-brand-badge">
-        {isArabic ? "تسجيل الدخول للإدارة" : "Management Login"}
-      </span>
-    </div>
+            <span className="login-brand-badge">
+              {currentText.managementLogin}
+            </span>
+          </div>
 
-    <div className="login-language-switcher" dir="ltr">
-      <button
-  type="button"
-  className={language === "en" ? "active" : ""}
-  onClick={() => {
-  setLanguage("en");
-  localStorage.setItem("language", "en");
-}}
->
-  {isArabic ? "الإنجليزية" : "EN"}
-</button>
+          <div
+            className="login-language-switcher"
+            dir="ltr"
+          >
+            <button
+              type="button"
+              className={language === "en" ? "active" : ""}
+              onClick={() => handleLanguageChange("en")}
+            >
+              {isArabic ? "الإنجليزية" : "EN"}
+            </button>
 
-<button
-  type="button"
-  className={language === "ar" ? "active" : ""}
-  onClick={() => {
-  setLanguage("ar");
-  localStorage.setItem("language", "ar");
-}}
->
-  {isArabic ? "العربية" : "AR"}
-</button>
-    </div>
-  </div>
-</header>
+            <button
+              type="button"
+              className={language === "ar" ? "active" : ""}
+              onClick={() => handleLanguageChange("ar")}
+            >
+              {isArabic ? "العربية" : "AR"}
+            </button>
+          </div>
+        </div>
+      </header>
 
       <main className="login-main">
         <section className="login-card">
@@ -142,7 +160,10 @@ function Login() {
             {currentText.description}
           </p>
 
-          <form className="login-form" onSubmit={handleSubmit}>
+          <form
+            className="login-form"
+            onSubmit={handleSubmit}
+          >
             <label className="login-field">
               <span>{currentText.username}</span>
 
@@ -154,7 +175,9 @@ function Login() {
                 <input
                   type="text"
                   value={username}
-                  onChange={(event) => setUsername(event.target.value)}
+                  onChange={(event) =>
+                    setUsername(event.target.value)
+                  }
                   required
                   autoComplete="username"
                 />
@@ -176,7 +199,9 @@ function Login() {
                 <input
                   type={showPassword ? "text" : "password"}
                   value={password}
-                  onChange={(event) => setPassword(event.target.value)}
+                  onChange={(event) =>
+                    setPassword(event.target.value)
+                  }
                   required
                   autoComplete="current-password"
                 />
@@ -188,11 +213,15 @@ function Login() {
                     setShowPassword((current) => !current)
                   }
                   aria-label={
-                    showPassword ? "Hide password" : "Show password"
+                    showPassword
+                      ? currentText.hidePassword
+                      : currentText.showPassword
                   }
                 >
                   <span className="material-symbols-outlined">
-                    {showPassword ? "visibility_off" : "visibility"}
+                    {showPassword
+                      ? "visibility_off"
+                      : "visibility"}
                   </span>
                 </button>
               </div>
@@ -217,9 +246,9 @@ function Login() {
             </button>
           </form>
 
-<p className="login-copyright">
-  {currentText.copyright}
-</p>
+          <p className="login-copyright">
+            {currentText.copyright}
+          </p>
         </section>
       </main>
     </div>

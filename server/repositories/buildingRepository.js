@@ -110,3 +110,42 @@ export async function findBuildingInformation() {
 
   return result.rows[0] || null;
 }
+
+export async function updateBuilding(buildingId, building) {
+  const result = await pool.query(
+    `UPDATE "BUILDING"
+     SET
+       "Name" = $1,
+       "Address" = $2,
+       "City" = $3,
+       "NumberOfFloors" = $4,
+       "NumberOfApartments" = $5,
+       "ContactPhone" = $6,
+       "Email" = $7,
+       "MaintenanceFee" = $8
+     WHERE "BuildingID" = $9
+     RETURNING
+       "BuildingID",
+       "Name",
+       "Address",
+       "City",
+       "NumberOfFloors",
+       "NumberOfApartments",
+       "ContactPhone",
+       "Email",
+       "MaintenanceFee"`,
+    [
+      building.name,
+      building.address,
+      building.city,
+      building.numberOfFloors,
+      building.numberOfApartments,
+      building.contactPhone,
+      building.email,
+      building.maintenanceFee,
+      buildingId
+    ]
+  );
+
+  return result.rows[0] || null;
+}

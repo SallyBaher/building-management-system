@@ -80,8 +80,8 @@ direction: ltr;
 }
 
 [dir="rtl"] .setup-badge {
-  margin-left: 0;
-  margin-right: 8px;
+  margin-left: 18px;
+  margin-right: 0;
 }
 
 .header-actions {

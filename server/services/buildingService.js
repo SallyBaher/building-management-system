@@ -7,7 +7,8 @@ import {
   insertBuilding,
   insertSuperAdmin,
   findInitialBuilding,
-  findBuildingInformation
+  findBuildingInformation,
+  updateBuilding
 } from "../repositories/buildingRepository.js";
 
 export class InitialBuildingSetupError extends Error {
@@ -45,6 +46,32 @@ function optionalString(value, fieldName) {
   }
 
   return value;
+}
+
+function requireBuildingId(buildingId) {
+  if (!Number.isInteger(buildingId) || buildingId <= 0) {
+    throw new InitialBuildingSetupError(
+      "A valid building ID is required."
+    );
+  }
+
+  return buildingId;
+}
+
+function requireNonNegativeNumber(value, fieldName) {
+  if (
+    value === undefined ||
+    value === null ||
+    value === "" ||
+    !Number.isFinite(Number(value)) ||
+    Number(value) < 0
+  ) {
+    throw new InitialBuildingSetupError(
+      `${fieldName} must be a non-negative number.`
+    );
+  }
+
+  return Number(value);
 }
 
 /**
@@ -159,4 +186,56 @@ export async function getBuildingInformation() {
   }
 
   return building;
+}
+
+export async function editBuildingInformation({
+  buildingId,
+  buildingName,
+  address,
+  city,
+  numberOfFloors,
+  numberOfApartments,
+  contactPhone,
+  email,
+  maintenanceFee
+} = {}) {
+  const validBuildingId = requireBuildingId(buildingId);
+
+  const building = {
+    name: requireString(buildingName, "Building name"),
+    address: requireString(address, "Address"),
+    city: requireString(city, "City"),
+    numberOfFloors: requireNonNegativeInteger(
+      Number(numberOfFloors),
+      "Number of floors"
+    ),
+    numberOfApartments: requireNonNegativeInteger(
+      Number(numberOfApartments),
+      "Number of apartments"
+    ),
+    contactPhone: optionalString(contactPhone, "Contact phone"),
+    email: optionalString(email, "Email"),
+    maintenanceFee:
+      maintenanceFee === undefined ||
+      maintenanceFee === null ||
+      maintenanceFee === ""
+        ? null
+        : requireNonNegativeNumber(
+            maintenanceFee,
+            "Maintenance fee"
+          )
+  };
+
+  const updatedBuilding = await updateBuilding(
+    validBuildingId,
+    building
+  );
+
+  if (!updatedBuilding) {
+    throw new InitialBuildingSetupError(
+      "Building not found."
+    );
+  }
+
+  return updatedBuilding;
 }

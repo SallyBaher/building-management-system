@@ -164,6 +164,46 @@ arabic: "العربية",
   }
 };
 
+export const translations = {
+  en: {
+    login: "Login",
+    landingEyebrow: "SMART BLOCK MANAGEMENT",
+    landingTitle: "Manage your building. Simplify your community.",
+    landingDescription:
+      "SBM helps building managers organize residents, apartments, payments, maintenance activities, and community information in one simple platform.",
+    startBuilding: "Start your building",
+    buildingManagement: "Building Management",
+    buildingManagementDescription:
+      "Keep your building information organized and accessible.",
+    paymentsReports: "Payments & Reports",
+    paymentsReportsDescription:
+      "Track payments, expenses, income, and financial reports.",
+    communityManagement: "Community Management",
+    communityManagementDescription:
+      "Manage residents, apartments, and community activities.",
+    footer: "© 2026 Smart Block Management. All rights reserved."
+  },
+
+  ar: {
+    login: "تسجيل الدخول",
+    landingEyebrow: "إس بي إم لإدارة المباني",
+    landingTitle: "أدر مبناك. وبسّط مجتمعك.",
+    landingDescription:
+      "يساعدك إس بي إم على تنظيم السكان والشقق والمدفوعات وأنشطة الصيانة ومعلومات المجتمع في منصة واحدة بسيطة.",
+    startBuilding: "ابدأ مبناك",
+    buildingManagement: "إدارة المبنى",
+    buildingManagementDescription:
+      "حافظ على معلومات مبناك منظمة وسهلة الوصول.",
+    paymentsReports: "المدفوعات والتقارير",
+    paymentsReportsDescription:
+      "تابع المدفوعات والمصروفات والإيرادات والتقارير المالية.",
+    communityManagement: "إدارة المجتمع",
+    communityManagementDescription:
+      "أدر السكان والشقق وأنشطة المجتمع.",
+    footer: "© 2026 إس بي إم لإدارة المباني. جميع الحقوق محفوظة."
+  }
+};
+
 const savedLanguage = localStorage.getItem("language") || "en";
 
 i18n
@@ -181,4 +221,15 @@ i18n
 i18n.on("languageChanged", (language) => {
   localStorage.setItem("language", language);
 });
+
+export const DEFAULT_LANGUAGE = "en";
+
+export function getStoredLanguage() {
+  return localStorage.getItem("sbm-language") || DEFAULT_LANGUAGE;
+}
+
+export function saveLanguage(language) {
+  localStorage.setItem("sbm-language", language);
+}
+
 export default i18n;

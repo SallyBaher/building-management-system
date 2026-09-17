@@ -1,0 +1,153 @@
+.building-edit-page {
+  min-height: 100vh;
+  background: #f5f7fb;
+  color: #091426;
+}
+
+.building-edit-content {
+  width: min(100%, 1100px);
+  margin: 0 auto;
+  padding: 32px 40px 40px;
+}
+
+.building-edit-breadcrumb {
+  margin-bottom: 12px;
+  color: #6f7f96;
+  font-size: 12px;
+}
+
+.building-edit-breadcrumb span {
+  margin: 0 8px;
+  color: #a0aaba;
+}
+
+.building-edit-content h1 {
+  margin: 0 0 28px;
+  font-size: 28px;
+  font-weight: 700;
+  color: #091426;
+}
+
+.building-edit-form {
+  background: #ffffff;
+  border: 1px solid #dce3ed;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(9, 20, 38, 0.04);
+  padding: 24px;
+}
+
+.building-edit-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px 24px;
+}
+
+.building-edit-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  color: #5d6d83;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.building-edit-grid input,
+.building-edit-grid textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #c5cedb;
+  border-radius: 2px;
+  background: #ffffff;
+  color: #091426;
+  font-family: "Cairo", Arial, sans-serif;
+  font-size: 13px;
+  padding: 10px 12px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.building-edit-grid input {
+  height: 40px;
+}
+
+.building-edit-grid textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.building-edit-grid input:focus,
+.building-edit-grid textarea:focus {
+  border-color: #1f5eff;
+  box-shadow: 0 0 0 1px #1f5eff;
+}
+
+.building-edit-grid input::placeholder,
+.building-edit-grid textarea::placeholder {
+  color: #9aa6b6;
+}
+
+.building-edit-full-width {
+  grid-column: 1 / -1;
+}
+
+.building-edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #e5eaf1;
+}
+
+.building-edit-actions button {
+  min-width: 105px;
+  height: 38px;
+  padding: 0 18px;
+  border-radius: 3px;
+  font-family: "Cairo", Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.building-edit-cancel {
+  border: 1px solid #c5cedb;
+  background: #ffffff;
+  color: #53647a;
+}
+
+.building-edit-cancel:hover {
+  background: #f5f7fb;
+}
+
+.building-edit-save {
+  border: 1px solid #091426;
+  background: #091426;
+  color: #ffffff;
+}
+
+.building-edit-save:hover {
+  background: #172943;
+}
+
+@media (max-width: 700px) {
+  .building-edit-content {
+    padding: 24px 18px;
+  }
+
+  .building-edit-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .building-edit-full-width {
+    grid-column: auto;
+  }
+
+  .building-edit-actions {
+    justify-content: stretch;
+  }
+
+  .building-edit-actions button {
+    flex: 1;
+  }
+}

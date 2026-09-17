@@ -22,6 +22,11 @@ app.use("/auth", authRoutes);
 app.use("/setup", setupRoutes);
 app.use("/floors", floorRoutes);
 app.use("/building", buildingRoutes);
+app.put("/test-update-route", (req, res) => {
+  res.json({
+    message: "PUT route is working"
+  });
+});
 app.use(notFound);
 app.use(errorHandler);
 

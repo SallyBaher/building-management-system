@@ -1,12 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import i18n from "../i18n";
+import i18n from "../../i18n";
 import "./CreateBuilding.css";
 
 function CreateBuilding() {
   const { t } = useTranslation();
 
-  const isArabic = i18n.language === "ar";
+  const [language, setLanguage] = useState(
+    () => localStorage.getItem("language") || "en"
+  );
+
+  const isArabic = language === "ar";
+
+  useEffect(() => {
+    i18n.changeLanguage(language);
+  }, [language]);
 
   const [formData, setFormData] = useState({
     buildingName: "",
@@ -20,83 +28,92 @@ function CreateBuilding() {
     idNumber: "",
     mobileNumber: "",
     username: "",
-    password: ""
+    password: "",
   });
 
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const handleLanguageChange = (newLanguage) => {
+    localStorage.setItem("language", newLanguage);
+    setLanguage(newLanguage);
+  };
+
   const handleChange = (event) => {
-  const { name, value } = event.target;
+    const { name, value } = event.target;
 
-  setFormData((previousData) => ({
-    ...previousData,
-    [name]: value
-  }));
-};
+    setFormData((previousData) => ({
+      ...previousData,
+      [name]: value,
+    }));
+  };
 
-const handleSubmit = async (event) => {
-  event.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-  const floors = Number(formData.numberOfFloors);
-const apartments = Number(formData.numberOfApartments);
+    const floors = Number(formData.numberOfFloors);
+    const apartments = Number(formData.numberOfApartments);
 
-if (!Number.isInteger(floors) || floors < 0) {
-  setError(t("invalidFloors"));
-  setMessage("");
-  return;
-}
+    if (!Number.isInteger(floors) || floors < 0) {
+      setError(t("invalidFloors"));
+      setMessage("");
+      return;
+    }
 
-if (!Number.isInteger(apartments) || apartments < 0) {
-  setError(t("invalidApartments"));
-  setMessage("");
-  return;
-}
+    if (!Number.isInteger(apartments) || apartments < 0) {
+      setError(t("invalidApartments"));
+      setMessage("");
+      return;
+    }
 
-  setMessage("");
-  setError("");
-  setIsSubmitting(true);
+    setMessage("");
+    setError("");
+    setIsSubmitting(true);
 
-  try {
-    const response = await fetch(
-  `${import.meta.env.VITE_API_URL}/setup/initial`,
-  {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        ...formData,
-        numberOfFloors: Number(formData.numberOfFloors),
-        numberOfApartments: Number(formData.numberOfApartments)
-      })
-    });
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/setup/initial`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...formData,
+            numberOfFloors: floors,
+            numberOfApartments: apartments,
+          }),
+        }
+      );
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (!response.ok) {
-  if (response.status === 400) {
-    throw new Error(t("setupAlreadyCompleted"));
-  }
+      if (!response.ok) {
+        if (response.status === 400) {
+          throw new Error(t("setupAlreadyCompleted"));
+        }
 
-  throw new Error(data.message || "Something went wrong.");
-}
+        throw new Error(
+          data.message || t("somethingWentWrong")
+        );
+      }
 
-    setMessage(data.message);
-  } catch (submitError) {
-    setError(submitError.message);
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+      setMessage(data.message);
+    } catch (submitError) {
+      setError(
+        submitError.message || t("somethingWentWrong")
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div
       className="setup-page"
       dir={isArabic ? "rtl" : "ltr"}
     >
-      {/* Header */}
       <header className="setup-header">
         <div className="header-inner">
           <div className="brand">
@@ -118,32 +135,36 @@ if (!Number.isInteger(apartments) || apartments < 0) {
           </div>
 
           <div className="header-actions">
-            <div className="language-switcher">
+            <div
+              className="language-switcher"
+              dir="ltr"
+            >
               <button
                 type="button"
-                className={!isArabic ? "language-active" : ""}
-                onClick={() => i18n.changeLanguage("en")}
+                className={
+                  !isArabic ? "language-active" : ""
+                }
+                onClick={() => handleLanguageChange("en")}
               >
-                {t("english")}
+                {isArabic ? "الإنجليزية" : "EN"}
               </button>
 
               <button
                 type="button"
-                className={isArabic ? "language-active" : ""}
-                onClick={() => i18n.changeLanguage("ar")}
+                className={
+                  isArabic ? "language-active" : ""
+                }
+                onClick={() => handleLanguageChange("ar")}
               >
-                {t("arabic")}
+                {isArabic ? "العربية" : "AR"}
               </button>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Main */}
       <main className="setup-main">
         <div className="setup-container">
-
-          {/* Step indicator */}
           <div className="setup-step">
             <div className="setup-step-left">
               <strong>
@@ -159,25 +180,22 @@ if (!Number.isInteger(apartments) || apartments < 0) {
               <span className="step-badge">
                 {t("stepOf", {
                   current: 1,
-                  total: 1
+                  total: 1,
                 })}
               </span>
             </div>
-
-            
           </div>
 
-          {/* Page heading */}
           <div className="page-heading">
             <h1>{t("createYourBuilding")}</h1>
 
             <p>{t("createBuildingSubtitle")}</p>
           </div>
 
-          {/* Form */}
-          <form className="setup-form" onSubmit={handleSubmit}>
-
-            {/* Building Information */}
+          <form
+            className="setup-form"
+            onSubmit={handleSubmit}
+          >
             <section className="form-card">
               <div className="card-header">
                 <div className="card-icon">
@@ -187,9 +205,7 @@ if (!Number.isInteger(apartments) || apartments < 0) {
                 </div>
 
                 <div>
-                  <h2>
-                    {t("buildingInformation")}
-                  </h2>
+                  <h2>{t("buildingInformation")}</h2>
 
                   <p>
                     {t("buildingInformationDescription")}
@@ -198,10 +214,7 @@ if (!Number.isInteger(apartments) || apartments < 0) {
               </div>
 
               <div className="card-body">
-
-                {/* Building Name + City */}
                 <div className="form-grid">
-
                   <div className="form-field">
                     <label htmlFor="buildingName">
                       {t("buildingName")}{" "}
@@ -213,22 +226,23 @@ if (!Number.isInteger(apartments) || apartments < 0) {
                         corporate_fare
                       </span>
 
-                     <input
-  id="buildingName"
-  name="buildingName"
-  type="text"
-  value={formData.buildingName}
-  onChange={handleChange}
-  placeholder={t("buildingNamePlaceholder")}
-  required
-/>
+                      <input
+                        id="buildingName"
+                        name="buildingName"
+                        type="text"
+                        value={formData.buildingName}
+                        onChange={handleChange}
+                        placeholder={t(
+                          "buildingNamePlaceholder"
+                        )}
+                        required
+                      />
                     </div>
                   </div>
 
                   <div className="form-field">
                     <label htmlFor="city">
-                      {t("city")}{" "}
-                      <span>*</span>
+                      {t("city")} <span>*</span>
                     </label>
 
                     <div className="input-wrapper">
@@ -237,24 +251,21 @@ if (!Number.isInteger(apartments) || apartments < 0) {
                       </span>
 
                       <input
-  id="city"
-  name="city"
-  type="text"
-  value={formData.city}
-  onChange={handleChange}
-  placeholder={t("cityPlaceholder")}
-  required
-/>
+                        id="city"
+                        name="city"
+                        type="text"
+                        value={formData.city}
+                        onChange={handleChange}
+                        placeholder={t("cityPlaceholder")}
+                        required
+                      />
                     </div>
                   </div>
-
                 </div>
 
-                {/* Address */}
                 <div className="form-field">
                   <label htmlFor="address">
-                    {t("address")}{" "}
-                    <span>*</span>
+                    {t("address")} <span>*</span>
                   </label>
 
                   <div className="input-wrapper">
@@ -263,24 +274,21 @@ if (!Number.isInteger(apartments) || apartments < 0) {
                     </span>
 
                     <input
-  id="address"
-  name="address"
-  type="text"
-  value={formData.address}
-  onChange={handleChange}
-  placeholder={t("addressPlaceholder")}
-  required
-/>
+                      id="address"
+                      name="address"
+                      type="text"
+                      value={formData.address}
+                      onChange={handleChange}
+                      placeholder={t("addressPlaceholder")}
+                      required
+                    />
                   </div>
                 </div>
 
-                {/* Floors + Apartments */}
                 <div className="form-grid">
-
                   <div className="form-field">
                     <label htmlFor="numberOfFloors">
-                      {t("numberOfFloors")}{" "}
-                      <span>*</span>
+                      {t("numberOfFloors")} <span>*</span>
                     </label>
 
                     <div className="input-wrapper">
@@ -289,20 +297,18 @@ if (!Number.isInteger(apartments) || apartments < 0) {
                       </span>
 
                       <input
-  id="numberOfFloors"
-  name="numberOfFloors"
-  type="number"
-  min="0"
-  value={formData.numberOfFloors}
-  onChange={handleChange}
-  placeholder={t("floorsPlaceholder")}
-  required
-/>
+                        id="numberOfFloors"
+                        name="numberOfFloors"
+                        type="number"
+                        min="0"
+                        value={formData.numberOfFloors}
+                        onChange={handleChange}
+                        placeholder={t("floorsPlaceholder")}
+                        required
+                      />
                     </div>
 
-                    <small>
-                      {t("floorsNote")}
-                    </small>
+                    <small>{t("floorsNote")}</small>
                   </div>
 
                   <div className="form-field">
@@ -317,27 +323,24 @@ if (!Number.isInteger(apartments) || apartments < 0) {
                       </span>
 
                       <input
-  id="numberOfApartments"
-  name="numberOfApartments"
-  type="number"
-  min="0"
-  value={formData.numberOfApartments}
-  onChange={handleChange}
-  placeholder={t("apartmentsPlaceholder")}
-  required
-/>
+                        id="numberOfApartments"
+                        name="numberOfApartments"
+                        type="number"
+                        min="0"
+                        value={formData.numberOfApartments}
+                        onChange={handleChange}
+                        placeholder={t(
+                          "apartmentsPlaceholder"
+                        )}
+                        required
+                      />
                     </div>
 
-                    <small>
-                      {t("apartmentsNote")}
-                    </small>
+                    <small>{t("apartmentsNote")}</small>
                   </div>
-
                 </div>
 
-                {/* Optional contact information */}
                 <div className="optional-section">
-
                   <div className="optional-heading">
                     <strong>
                       <span className="material-symbols-outlined">
@@ -349,13 +352,10 @@ if (!Number.isInteger(apartments) || apartments < 0) {
                       )}
                     </strong>
 
-                    <span>
-                      {t("optional")}
-                    </span>
+                    <span>{t("optional")}</span>
                   </div>
 
                   <div className="form-grid">
-
                     <div className="form-field">
                       <label htmlFor="contactPhone">
                         {t("contactPhone")}
@@ -366,18 +366,22 @@ if (!Number.isInteger(apartments) || apartments < 0) {
                           call
                         </span>
 
-                       <input
-  id="contactPhone"
-  name="contactPhone"
-  type="tel"
-  dir={isArabic ? "rtl" : "ltr"}
-  style={{
-    textAlign: isArabic ? "right" : "left"
-  }}
-  value={formData.contactPhone}
-  onChange={handleChange}
-  placeholder={t("contactPhonePlaceholder")}
-/>
+                        <input
+                          id="contactPhone"
+                          name="contactPhone"
+                          type="tel"
+                          dir={isArabic ? "rtl" : "ltr"}
+                          style={{
+                            textAlign: isArabic
+                              ? "right"
+                              : "left",
+                          }}
+                          value={formData.contactPhone}
+                          onChange={handleChange}
+                          placeholder={t(
+                            "contactPhonePlaceholder"
+                          )}
+                        />
                       </div>
                     </div>
 
@@ -391,26 +395,28 @@ if (!Number.isInteger(apartments) || apartments < 0) {
                           mail
                         </span>
 
-                       <input
-  id="email"
-  name="email"
-  type="email"
-  dir={isArabic ? "rtl" : "ltr"}
-  value={formData.email}
-  onChange={handleChange}
-  placeholder={t("emailPlaceholder")}
-/>
+                        <input
+                          id="email"
+                          name="email"
+                          type="email"
+                          dir={isArabic ? "rtl" : "ltr"}
+                          style={{
+                            textAlign: isArabic
+                              ? "right"
+                              : "left",
+                          }}
+                          value={formData.email}
+                          onChange={handleChange}
+                          placeholder={t("emailPlaceholder")}
+                        />
                       </div>
                     </div>
-
                   </div>
                 </div>
               </div>
             </section>
 
-            {/* Super Admin */}
             <section className="form-card">
-
               <div className="card-header">
                 <div className="card-icon admin-icon">
                   <span className="material-symbols-outlined">
@@ -419,25 +425,17 @@ if (!Number.isInteger(apartments) || apartments < 0) {
                 </div>
 
                 <div>
-                  <h2>
-                    {t("createSuperAdminAccount")}
-                  </h2>
+                  <h2>{t("createSuperAdminAccount")}</h2>
 
-                  <p>
-                    {t("superAdminDescription")}
-                  </p>
+                  <p>{t("superAdminDescription")}</p>
                 </div>
               </div>
 
               <div className="card-body">
-
-                {/* Full Name + ID */}
                 <div className="form-grid">
-
                   <div className="form-field">
                     <label htmlFor="fullName">
-                      {t("fullName")}{" "}
-                      <span>*</span>
+                      {t("fullName")} <span>*</span>
                     </label>
 
                     <div className="input-wrapper">
@@ -446,21 +444,22 @@ if (!Number.isInteger(apartments) || apartments < 0) {
                       </span>
 
                       <input
-  id="fullName"
-  name="fullName"
-  type="text"
-  value={formData.fullName}
-  onChange={handleChange}
-  placeholder={t("fullNamePlaceholder")}
-  required
-/>
+                        id="fullName"
+                        name="fullName"
+                        type="text"
+                        value={formData.fullName}
+                        onChange={handleChange}
+                        placeholder={t(
+                          "fullNamePlaceholder"
+                        )}
+                        required
+                      />
                     </div>
                   </div>
 
                   <div className="form-field">
                     <label htmlFor="idNumber">
-                      {t("idNumber")}{" "}
-                      <span>*</span>
+                      {t("idNumber")} <span>*</span>
                     </label>
 
                     <div className="input-wrapper">
@@ -469,25 +468,24 @@ if (!Number.isInteger(apartments) || apartments < 0) {
                       </span>
 
                       <input
-  id="idNumber"
-  name="idNumber"
-  type="text"
-  dir="ltr"
-  value={formData.idNumber}
-  onChange={handleChange}
-  placeholder={t("idNumberPlaceholder")}
-  required
-/>
+                        id="idNumber"
+                        name="idNumber"
+                        type="text"
+                        dir="ltr"
+                        value={formData.idNumber}
+                        onChange={handleChange}
+                        placeholder={t(
+                          "idNumberPlaceholder"
+                        )}
+                        required
+                      />
                     </div>
                   </div>
-
                 </div>
 
-                {/* Mobile */}
                 <div className="form-field">
                   <label htmlFor="mobileNumber">
-                    {t("mobileNumber")}{" "}
-                    <span>*</span>
+                    {t("mobileNumber")} <span>*</span>
                   </label>
 
                   <div className="input-wrapper">
@@ -495,29 +493,30 @@ if (!Number.isInteger(apartments) || apartments < 0) {
                       smartphone
                     </span>
 
-                 <input
-  id="mobileNumber"
-  name="mobileNumber"
-  type="tel"
-  dir={isArabic ? "rtl" : "ltr"}
-  style={{
-    textAlign: isArabic ? "right" : "left"
-  }}
-  value={formData.mobileNumber}
-  onChange={handleChange}
-  placeholder={t("mobileNumberPlaceholder")}
-  required
-/>
+                    <input
+                      id="mobileNumber"
+                      name="mobileNumber"
+                      type="tel"
+                      dir={isArabic ? "rtl" : "ltr"}
+                      style={{
+                        textAlign: isArabic
+                          ? "right"
+                          : "left",
+                      }}
+                      value={formData.mobileNumber}
+                      onChange={handleChange}
+                      placeholder={t(
+                        "mobileNumberPlaceholder"
+                      )}
+                      required
+                    />
                   </div>
-
                 </div>
 
-                {/* Login credentials */}
                 <div className="form-grid">
                   <div className="form-field">
                     <label htmlFor="username">
-                      {t("username")} {" "}
-                      <span>*</span>
+                      {t("username")} <span>*</span>
                     </label>
 
                     <div className="input-wrapper">
@@ -531,7 +530,9 @@ if (!Number.isInteger(apartments) || apartments < 0) {
                         type="text"
                         value={formData.username}
                         onChange={handleChange}
-                        placeholder={t("usernamePlaceholder")}
+                        placeholder={t(
+                          "usernamePlaceholder"
+                        )}
                         autoComplete="username"
                         required
                       />
@@ -540,8 +541,7 @@ if (!Number.isInteger(apartments) || apartments < 0) {
 
                   <div className="form-field">
                     <label htmlFor="password">
-                      {t("password")} {" "}
-                      <span>*</span>
+                      {t("password")} <span>*</span>
                     </label>
 
                     <div className="input-wrapper">
@@ -555,48 +555,46 @@ if (!Number.isInteger(apartments) || apartments < 0) {
                         type="password"
                         value={formData.password}
                         onChange={handleChange}
-                        placeholder={t("passwordPlaceholder")}
+                        placeholder={t(
+                          "passwordPlaceholder"
+                        )}
                         autoComplete="new-password"
                         required
                       />
                     </div>
                   </div>
                 </div>
-
               </div>
             </section>
 
-           {/* Required fields note */}
-<div className="required-note">
-  <span>*</span>{" "}
-  {t("requiredFieldsNote")}
+            <div className="required-note">
+              <span>*</span> {t("requiredFieldsNote")}
 
-  {message && <p>{message}</p>}
-  {error && <p>{error}</p>}
-</div>
-
-            {/* Actions */}
-            <div className="form-actions">
-              <button
-  type="submit"
-  className="create-button"
-  disabled={isSubmitting}
->
-  <span>
-    {isSubmitting ? t("creating") : t("createBuilding")}
-  </span>
-
-  <span className="material-symbols-outlined">
-    arrow_forward
-  </span>
-</button>
+              {message && <p>{message}</p>}
+              {error && <p>{error}</p>}
             </div>
 
+            <div className="form-actions">
+              <button
+                type="submit"
+                className="create-button"
+                disabled={isSubmitting}
+              >
+                <span>
+                  {isSubmitting
+                    ? t("creating")
+                    : t("createBuilding")}
+                </span>
+
+                <span className="material-symbols-outlined">
+                  {isArabic ? "arrow_back" : "arrow_forward"}
+                </span>
+              </button>
+            </div>
           </form>
         </div>
       </main>
 
-      {/* Footer */}
       <footer className="setup-footer">
         {t("footer")}
       </footer>
