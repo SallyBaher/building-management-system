@@ -14,6 +14,8 @@ function BuildingInformation() {
     () => localStorage.getItem("language") || "en"
   );
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   const isArabic = language === "ar";
 
   const text = {
@@ -196,52 +198,157 @@ function BuildingInformation() {
       dir={isArabic ? "rtl" : "ltr"}
     >
       <header className="building-header">
-        <div className="building-header-brand">
-          <span className="building-header-title">SBM</span>
+  <div className="building-header-left">
+    <button
+      type="button"
+      className="building-menu-button"
+      onClick={() => setIsMenuOpen((previous) => !previous)}
+      aria-label="Toggle navigation menu"
+    >
+      <span className="material-symbols-outlined">
+        {isMenuOpen ? "close" : "menu"}
+      </span>
+    </button>
 
-          <span className="building-header-subtitle">
-            {isArabic
-              ? "إدارة المباني الذكية"
-              : "Smart Block Management"}
-          </span>
-        </div>
+    <div className="building-header-brand">
+      <span className="building-header-title">SBM</span>
 
-        <div className="building-header-actions">
-          <div className="building-language-switcher" dir="ltr">
-            <button
-              type="button"
-              className={language === "en" ? "active" : ""}
-              onClick={() => handleLanguageChange("en")}
-            >
-              {currentText.english}
-            </button>
+      <span className="building-header-subtitle">
+        {isArabic
+          ? "إدارة المباني الذكية"
+          : "Smart Block Management"}
+      </span>
+    </div>
+  </div>
 
-            <button
-              type="button"
-              className={language === "ar" ? "active" : ""}
-              onClick={() => handleLanguageChange("ar")}
-            >
-              {currentText.arabic}
-            </button>
-          </div>
+  <div className="building-header-actions">
+    <div className="building-language-switcher" dir="ltr">
+      <button
+        type="button"
+        className={language === "en" ? "active" : ""}
+        onClick={() => handleLanguageChange("en")}
+      >
+        {currentText.english}
+      </button>
 
-          <span className="material-symbols-outlined building-header-icon">
-            notifications
-          </span>
+      <button
+        type="button"
+        className={language === "ar" ? "active" : ""}
+        onClick={() => handleLanguageChange("ar")}
+      >
+        {currentText.arabic}
+      </button>
+    </div>
 
-          <button
-            type="button"
-            className="building-logout-button"
-            onClick={handleLogout}
-          >
-            <span className="material-symbols-outlined">
-              logout
-            </span>
+    <span className="material-symbols-outlined building-header-icon">
+      notifications
+    </span>
 
-            {currentText.logout}
-          </button>
-        </div>
-      </header>
+    <button
+      type="button"
+      className="building-header-settings"
+      aria-label={currentText.settings}
+    >
+      <span className="material-symbols-outlined">
+        settings
+      </span>
+    </button>
+
+    <button
+      type="button"
+      className="building-logout-button"
+      onClick={handleLogout}
+    >
+      <span className="material-symbols-outlined">
+        logout
+      </span>
+
+      {currentText.logout}
+    </button>
+  </div>
+
+  {isMenuOpen && (
+    <nav className="building-mobile-menu">
+      <button
+        type="button"
+        className="building-sidebar-link"
+        onClick={() => {
+          setIsMenuOpen(false);
+          navigate("/building-information");
+        }}
+      >
+        <span className="material-symbols-outlined">
+          dashboard
+        </span>
+
+        {currentText.dashboard}
+      </button>
+
+      <button
+        type="button"
+        className="building-sidebar-link active"
+        onClick={() => {
+          setIsMenuOpen(false);
+          navigate("/building-information");
+        }}
+      >
+        <span className="material-symbols-outlined">
+          apartment
+        </span>
+
+        {currentText.building}
+      </button>
+
+      <button
+        type="button"
+        className="building-sidebar-link"
+        onClick={() => setIsMenuOpen(false)}
+      >
+        <span className="material-symbols-outlined">
+          engineering
+        </span>
+
+        {currentText.maintenance}
+      </button>
+
+      <button
+        type="button"
+        className="building-sidebar-link"
+        onClick={() => setIsMenuOpen(false)}
+      >
+        <span className="material-symbols-outlined">
+          payments
+        </span>
+
+        {currentText.finance}
+      </button>
+
+      <button
+        type="button"
+        className="building-sidebar-link"
+        onClick={() => setIsMenuOpen(false)}
+      >
+        <span className="material-symbols-outlined">
+          groups
+        </span>
+
+        {currentText.residents}
+      </button>
+
+      <button
+        type="button"
+        className="building-sidebar-link"
+        onClick={() => setIsMenuOpen(false)}
+      >
+        <span className="material-symbols-outlined">
+          chat
+        </span>
+
+        {currentText.communication}
+      </button>
+    </nav>
+  )}
+</header>
 
       <div className="building-layout">
         <aside className="building-sidebar">
@@ -307,13 +414,6 @@ function BuildingInformation() {
               {currentText.communication}
             </button>
 
-            <button type="button" className="building-sidebar-link">
-              <span className="material-symbols-outlined">
-                settings
-              </span>
-
-              {currentText.settings}
-            </button>
           </nav>
 
           <div className="building-sidebar-footer">
@@ -410,9 +510,6 @@ function BuildingInformation() {
                 </div>
               </div>
 
-              <span className="building-status">
-                {currentText.active}
-              </span>
             </div>
 
             <div className="building-information-grid">

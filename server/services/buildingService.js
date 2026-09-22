@@ -83,6 +83,7 @@ export async function createInitialBuildingSetup({
   city,
   numberOfFloors,
   numberOfApartments,
+  maintenanceFee,
   contactPhone,
   email,
   fullName,
@@ -103,6 +104,10 @@ export async function createInitialBuildingSetup({
       numberOfApartments,
       "Number of apartments"
     ),
+    maintenanceFee: requireNonNegativeNumber(
+      maintenanceFee,
+      "Yearly maintenance fee"
+    ),
     contactPhone: optionalString(contactPhone, "Contact phone"),
     email: optionalString(email, "Email")
   };
@@ -114,6 +119,7 @@ export async function createInitialBuildingSetup({
     username: requireString(username, "Username"),
     password: requireString(password, "Password")
   };
+
   const passwordHash = await hashPassword(superAdmin.password);
 
   const client = await pool.connect();

@@ -29,10 +29,11 @@ export async function insertBuilding(client, building) {
        "City",
        "NumberOfFloors",
        "NumberOfApartments",
+       "MaintenanceFee",
        "ContactPhone",
        "Email"
      )
-     VALUES ($1, $2, $3, $4, $5, $6, $7)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
      RETURNING "BuildingID"`,
     [
       building.name,
@@ -40,6 +41,7 @@ export async function insertBuilding(client, building) {
       building.city,
       building.numberOfFloors,
       building.numberOfApartments,
+      building.maintenanceFee,
       building.contactPhone,
       building.email
     ]

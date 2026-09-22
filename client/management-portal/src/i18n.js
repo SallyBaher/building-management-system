@@ -24,15 +24,20 @@ const resources = {
       address: "Address",
       numberOfFloors: "Number of Floors",
       numberOfApartments: "Number of Apartments",
+      yearlyMaintenanceFee: "Yearly Maintenance Fee",
 
       buildingNamePlaceholder: "e.g., Oceanview Tower",
       cityPlaceholder: "e.g., Cairo",
       addressPlaceholder: "e.g., 14 El-Tahrir St., Zamalek",
       floorsPlaceholder: "e.g., 12",
       apartmentsPlaceholder: "e.g., 48",
+      yearlyMaintenanceFeePlaceholder: "e.g., 12000.00",
 
       floorsNote: "Can be set to 0 initially if configuring later.",
-      apartmentsNote: "Can be set to 0 initially if units are unassigned.",
+      apartmentsNote:
+        "Can be set to 0 initially if units are unassigned.",
+      yearlyMaintenanceFeeNote:
+        "The yearly maintenance fee applied to each apartment.",
 
       optionalBuildingContactInformation:
         "Optional Building Contact Information",
@@ -64,22 +69,26 @@ const resources = {
 
       createBuilding: "Create Building",
 
-invalidFloors: "Number of floors must be 0 or greater.",
-invalidApartments: "Number of apartments must be 0 or greater.",
+      invalidFloors:
+        "Number of floors must be 0 or greater.",
+      invalidApartments:
+        "Number of apartments must be 0 or greater.",
+      invalidMaintenanceFee:
+        "Yearly maintenance fee must be 0 or greater.",
 
-creating: "Creating...",
-setupAlreadyCompleted:
-  "Initial building setup has already been completed.",
+      creating: "Creating...",
+      setupAlreadyCompleted:
+        "Initial building setup has already been completed.",
 
-complianceNote:
-  "Compliance verified for local condominium & HOA registries",
-encryptedSetup: "256-bit Encrypted Setup",
+      complianceNote:
+        "Compliance verified for local condominium & HOA registries",
+      encryptedSetup: "256-bit Encrypted Setup",
 
-footer: "© 2026 SBM. All rights reserved.",
+      footer: "© 2026 SBM. All rights reserved.",
 
       english: "EN",
-      arabic: "AR"
-    }
+      arabic: "AR",
+    },
   },
 
   ar: {
@@ -104,16 +113,21 @@ footer: "© 2026 SBM. All rights reserved.",
       address: "العنوان",
       numberOfFloors: "عدد الطوابق",
       numberOfApartments: "عدد الشقق",
+      yearlyMaintenanceFee: "رسوم الصيانة السنوية",
 
       buildingNamePlaceholder: "مثال: برج أوشن فيو",
       cityPlaceholder: "مثال: القاهرة",
       addressPlaceholder: "مثال: 14 شارع التحرير، الزمالك",
       floorsPlaceholder: "مثال: 12",
       apartmentsPlaceholder: "مثال: 48",
+      yearlyMaintenanceFeePlaceholder: "مثال: 12000.00",
 
-      floorsNote: "يمكن إدخاله كـ 0 مبدئيًا إذا كنت ستقوم بالإعداد لاحقًا.",
+      floorsNote:
+        "يمكن إدخاله كـ 0 مبدئيًا إذا كنت ستقوم بالإعداد لاحقًا.",
       apartmentsNote:
         "يمكن إدخاله كـ 0 مبدئيًا إذا لم يتم تخصيص الوحدات بعد.",
+      yearlyMaintenanceFeeNote:
+        "رسوم الصيانة السنوية المطبقة على كل شقة.",
 
       optionalBuildingContactInformation:
         "معلومات الاتصال الاختيارية بالمبنى",
@@ -137,7 +151,7 @@ footer: "© 2026 SBM. All rights reserved.",
 
       fullNamePlaceholder: "مثال: تامر منصور",
       idNumberPlaceholder: "مثال: 29001011234567",
-     mobileNumberPlaceholder: "مثال: ‎+20 10 1234 5678‎",
+      mobileNumberPlaceholder: "مثال: ‎+20 10 1234 5678‎",
       usernamePlaceholder: "اختر اسم مستخدم",
       passwordPlaceholder: "أدخل كلمة المرور",
 
@@ -145,23 +159,27 @@ footer: "© 2026 SBM. All rights reserved.",
 
       createBuilding: "إنشاء المبنى",
 
-invalidFloors: "يجب أن يكون عدد الطوابق صفرًا أو أكثر.",
-invalidApartments: "يجب أن يكون عدد الشقق صفرًا أو أكثر.",
+      invalidFloors:
+        "يجب أن يكون عدد الطوابق صفرًا أو أكثر.",
+      invalidApartments:
+        "يجب أن يكون عدد الشقق صفرًا أو أكثر.",
+      invalidMaintenanceFee:
+        "يجب أن تكون رسوم الصيانة السنوية صفرًا أو أكثر.",
 
-creating: "جارٍ الإنشاء...",
-setupAlreadyCompleted:
-  "تم إكمال الإعداد الأولي للمبنى بالفعل.",
+      creating: "جارٍ الإنشاء...",
+      setupAlreadyCompleted:
+        "تم إكمال الإعداد الأولي للمبنى بالفعل.",
 
-complianceNote:
-  "متوافق مع متطلبات سجلات الكمبوند واتحاد الملاك المحلية",
-encryptedSetup: "إعداد مشفر بتقنية 256 بت",
+      complianceNote:
+        "متوافق مع متطلبات سجلات الكمبوند واتحاد الملاك المحلية",
+      encryptedSetup: "إعداد مشفر بتقنية 256 بت",
 
-footer: "© 2026 إس بي إم. جميع الحقوق محفوظة.",
+      footer: "© 2026 إس بي إم. جميع الحقوق محفوظة.",
 
       english: "الإنجليزية",
-arabic: "العربية",
-    }
-  }
+      arabic: "العربية",
+    },
+  },
 };
 
 export const translations = {
@@ -171,7 +189,7 @@ export const translations = {
     landingTitle: "Manage your building. Simplify your community.",
     landingDescription:
       "SBM helps building managers organize residents, apartments, payments, maintenance activities, and community information in one simple platform.",
-    startBuilding: "Start your building",
+    startBuilding: "Create your building",
     buildingManagement: "Building Management",
     buildingManagementDescription:
       "Keep your building information organized and accessible.",
@@ -181,7 +199,8 @@ export const translations = {
     communityManagement: "Community Management",
     communityManagementDescription:
       "Manage residents, apartments, and community activities.",
-    footer: "© 2026 Smart Block Management. All rights reserved."
+    footer:
+      "© 2026 Smart Block Management. All rights reserved.",
   },
 
   ar: {
@@ -190,7 +209,7 @@ export const translations = {
     landingTitle: "أدر مبناك. وبسّط مجتمعك.",
     landingDescription:
       "يساعدك إس بي إم على تنظيم السكان والشقق والمدفوعات وأنشطة الصيانة ومعلومات المجتمع في منصة واحدة بسيطة.",
-    startBuilding: "ابدأ مبناك",
+    startBuilding: "أنشئ مبناك",
     buildingManagement: "إدارة المبنى",
     buildingManagementDescription:
       "حافظ على معلومات مبناك منظمة وسهلة الوصول.",
@@ -200,11 +219,13 @@ export const translations = {
     communityManagement: "إدارة المجتمع",
     communityManagementDescription:
       "أدر السكان والشقق وأنشطة المجتمع.",
-    footer: "© 2026 إس بي إم لإدارة المباني. جميع الحقوق محفوظة."
-  }
+    footer:
+      "© 2026 إس بي إم لإدارة المباني. جميع الحقوق محفوظة.",
+  },
 };
 
-const savedLanguage = localStorage.getItem("language") || "en";
+const savedLanguage =
+  localStorage.getItem("language") || "en";
 
 i18n
   .use(initReactI18next)
@@ -214,8 +235,8 @@ i18n
     fallbackLng: "en",
 
     interpolation: {
-      escapeValue: false
-    }
+      escapeValue: false,
+    },
   });
 
 i18n.on("languageChanged", (language) => {

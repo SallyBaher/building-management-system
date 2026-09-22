@@ -21,7 +21,7 @@ function Landing() {
         "Manage your building. Simplify your community.",
       landingDescription:
         "SBM helps building managers organize residents, apartments, payments, maintenance activities, and community information in one simple platform.",
-      startBuilding: "Start your building",
+      startBuilding: "Create your building",
       buildingManagement: "Building Management",
       buildingManagementDescription:
         "Organize your building information, apartments, and residents in one place.",
@@ -42,7 +42,7 @@ function Landing() {
       landingTitle: "أدر مبناك. وبسّط مجتمعك.",
       landingDescription:
         "يساعدك إس بي إم على تنظيم معلومات المبنى والشقق والسكان والمدفوعات وأنشطة الصيانة في منصة واحدة بسيطة.",
-      startBuilding: "ابدأ مبناك",
+      startBuilding: "أنشئ مبناك",
       buildingManagement: "إدارة المبنى",
       buildingManagementDescription:
         "نظّم معلومات المبنى والشقق والسكان في مكان واحد.",
@@ -85,22 +85,23 @@ function Landing() {
           </div>
 
           <div className="landing-header-actions">
-            <button
-              type="button"
-              className="landing-language-switcher"
-              onClick={() =>
-                handleLanguageChange(
-                  isArabic ? "en" : "ar"
-                )
-              }
-              dir="ltr"
-            >
-              <span className="material-symbols-outlined">
-                language
-              </span>
+            <div className="landing-language-switcher" dir="ltr">
+  <button
+    type="button"
+    className={language === "en" ? "active" : ""}
+    onClick={() => handleLanguageChange("en")}
+  >
+    {isArabic ? "الإنجليزية" : "EN"}
+  </button>
 
-              <span>{isArabic ? "EN" : "عربي"}</span>
-            </button>
+  <button
+    type="button"
+    className={language === "ar" ? "active" : ""}
+    onClick={() => handleLanguageChange("ar")}
+  >
+    {isArabic ? "العربية" : "AR"}
+  </button>
+</div>
 
             <button
               type="button"

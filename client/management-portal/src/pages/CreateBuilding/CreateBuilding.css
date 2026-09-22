@@ -355,8 +355,8 @@ direction: ltr;
 }
 
 .form-field input:focus {
-  border-color: #091426;
-  box-shadow: 0 0 0 1px #091426;
+  border-color: transparent;
+  box-shadow: none;
 }
 
 .form-field input[type="number"] {
@@ -623,8 +623,8 @@ font-family: "Cairo", Arial, sans-serif;
 }
 
 .input-wrapper:focus-within {
-  border-color: #091426;
-  box-shadow: 0 0 0 1px #091426;
+  border-color: #c5c6cd;
+  box-shadow: none;
 }
 
 .input-wrapper input {

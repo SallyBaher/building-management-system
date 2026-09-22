@@ -22,6 +22,7 @@ function CreateBuilding() {
     city: "",
     numberOfFloors: "",
     numberOfApartments: "",
+    maintenanceFee: "",
     contactPhone: "",
     email: "",
     fullName: "",
@@ -54,6 +55,13 @@ function CreateBuilding() {
 
     const floors = Number(formData.numberOfFloors);
     const apartments = Number(formData.numberOfApartments);
+    const maintenanceFee = Number(formData.maintenanceFee);
+
+if (!Number.isFinite(maintenanceFee) || maintenanceFee < 0) {
+  setError(t("invalidMaintenanceFee"));
+  setMessage("");
+  return;
+}
 
     if (!Number.isInteger(floors) || floors < 0) {
       setError(t("invalidFloors"));
@@ -80,10 +88,11 @@ function CreateBuilding() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            ...formData,
-            numberOfFloors: floors,
-            numberOfApartments: apartments,
-          }),
+  ...formData,
+  numberOfFloors: floors,
+  numberOfApartments: apartments,
+  maintenanceFee,
+}),
         }
       );
 
@@ -339,6 +348,32 @@ function CreateBuilding() {
                     <small>{t("apartmentsNote")}</small>
                   </div>
                 </div>
+
+                <div className="form-field">
+  <label htmlFor="maintenanceFee">
+    {t("yearlyMaintenanceFee")} <span>*</span>
+  </label>
+
+  <div className="input-wrapper">
+    <span className="material-symbols-outlined">
+      payments
+    </span>
+
+    <input
+      id="maintenanceFee"
+      name="maintenanceFee"
+      type="number"
+      min="0"
+      step="0.01"
+      value={formData.maintenanceFee}
+      onChange={handleChange}
+      placeholder={t("yearlyMaintenanceFeePlaceholder")}
+      required
+    />
+  </div>
+
+  <small>{t("yearlyMaintenanceFeeNote")}</small>
+</div>
 
                 <div className="optional-section">
                   <div className="optional-heading">

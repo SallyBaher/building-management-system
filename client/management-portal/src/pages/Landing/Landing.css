@@ -62,21 +62,46 @@
 .landing-language-switcher {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 6px 0;
-  border: 0;
-  background: transparent;
-  color: #091426;
-  font-family: "Cairo", Arial, sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
+  gap: 0;
+  padding: 2px;
+  border: 1px solid #d5d9e1;
+  border-radius: 9px;
+  background: #f1f3f6;
   direction: ltr;
 }
 
-.landing-language-switcher .material-symbols-outlined {
-  font-size: 19px;
+.landing-language-switcher button {
+  min-width: 42px;
+  height: 34px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: #091426;
+  font-family: "Cairo", Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    box-shadow 0.15s ease,
+    font-weight 0.15s ease;
+}
+
+.landing-language-switcher button.active {
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(9, 20, 38, 0.1);
+  font-weight: 700;
+}
+
+.landing-language-switcher button:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.landing-language-switcher button:focus-visible {
+  outline: 2px solid #091426;
+  outline-offset: 2px;
 }
 
 .landing-login-button {
