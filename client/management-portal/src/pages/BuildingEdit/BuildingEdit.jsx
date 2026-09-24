@@ -128,16 +128,16 @@ function BuildingEdit() {
           );
         }
 
-        setFormData({
-          name: data.name || "",
-          address: data.address || "",
-          city: data.city || "",
-          numberOfFloors: data.numberOfFloors ?? "",
-          numberOfApartments: data.numberOfApartments ?? "",
-          maintenanceFee: data.maintenanceFee ?? "",
-          contactPhone: data.contactPhone || "",
-          email: data.email || "",
-        });
+       setFormData({
+  name: data.Name || "",
+  address: data.Address || "",
+  city: data.City || "",
+  numberOfFloors: data.NumberOfFloors ?? "",
+  numberOfApartments: data.NumberOfApartments ?? "",
+  maintenanceFee: data.MaintenanceFee ?? "",
+  contactPhone: data.ContactPhone || "",
+  email: data.Email || "",
+});
       } catch (error) {
         console.error("Failed to load building information:", error);
       }
@@ -453,11 +453,6 @@ async function handleSubmit(event) {
         </aside>
 
         <main className="building-edit-content">
-          <div className="building-edit-breadcrumb">
-            <span>{currentText.home}</span>
-            <span>›</span>
-            <span>{currentText.building}</span>
-          </div>
 
           <h1>{currentText.buildingMasterData}</h1>
 

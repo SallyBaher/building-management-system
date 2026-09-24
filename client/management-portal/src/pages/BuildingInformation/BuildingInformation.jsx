@@ -167,7 +167,7 @@ function BuildingInformation() {
 
   function handleLogout() {
     localStorage.removeItem("token");
-    navigate("/login");
+    navigate("/");
   }
 
   if (loading) {
@@ -398,13 +398,17 @@ function BuildingInformation() {
               {currentText.finance}
             </button>
 
-            <button type="button" className="building-sidebar-link">
-              <span className="material-symbols-outlined">
-                groups
-              </span>
+            <button
+  type="button"
+  className="building-sidebar-link"
+  onClick={() => navigate("/residents")}
+>
+  <span className="material-symbols-outlined">
+    groups
+  </span>
 
-              {currentText.residents}
-            </button>
+  {currentText.residents}
+</button>
 
             <button type="button" className="building-sidebar-link">
               <span className="material-symbols-outlined">

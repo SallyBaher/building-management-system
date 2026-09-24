@@ -1,0 +1,539 @@
+.account-edit-page {
+  min-height: 100vh;
+  background: #f4f7fb;
+  color: #091426;
+  font-family: "Cairo", Arial, sans-serif;
+}
+
+.account-edit-page *,
+.account-edit-page *::before,
+.account-edit-page *::after {
+  box-sizing: border-box;
+}
+
+/* Header */
+
+.account-edit-header {
+  position: relative;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  background: #091426;
+  color: #ffffff;
+  z-index: 100;
+}
+
+.account-edit-header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.account-edit-header-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.account-edit-header-title {
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.account-edit-header-subtitle {
+  color: #b9c3d2;
+  font-size: 10px;
+}
+
+.account-edit-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.account-edit-language-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid #536176;
+  border-radius: 5px;
+  background: #17243a;
+}
+
+.account-edit-language-switcher button {
+  min-width: 34px;
+  padding: 5px 8px;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: #cbd5e1;
+  font-family: "Cairo", Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.account-edit-language-switcher button.active {
+  background: #ffffff;
+  color: #091426;
+}
+
+.account-edit-header-icon {
+  color: #ffffff;
+  font-size: 20px;
+}
+
+.account-edit-header-settings {
+  width: 28px;
+  height: 28px;
+  border: 0;
+  background: transparent;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.account-edit-header-settings .material-symbols-outlined {
+  font-size: 20px;
+}
+
+.account-edit-logout-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid #64748b;
+  border-radius: 5px;
+  padding: 7px 12px;
+  background: transparent;
+  color: #ffffff;
+  font-family: "Cairo", Arial, sans-serif;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.account-edit-logout-button .material-symbols-outlined {
+  font-size: 20px;
+}
+
+.account-edit-menu-button {
+  display: none;
+}
+
+/* Layout */
+
+.account-edit-layout {
+  display: flex;
+  min-height: calc(100vh - 64px);
+  direction: ltr;
+}
+
+/* Sidebar */
+
+.account-edit-sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-right: 1px solid #e1e6ee;
+}
+
+.account-edit-sidebar-heading {
+  padding: 24px 20px 18px;
+  border-bottom: 1px solid #eef1f5;
+}
+
+.account-edit-sidebar-heading h2 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.account-edit-sidebar-heading p {
+  margin: 3px 0 0;
+  color: #7b8492;
+  font-size: 10px;
+}
+
+.account-edit-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 18px 10px;
+}
+
+.account-edit-sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 11px 12px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #526074;
+  font-family: "Cairo", Arial, sans-serif;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.account-edit-sidebar-link:hover {
+  background: #f0f4fa;
+  color: #091426;
+}
+
+.account-edit-sidebar-link.active {
+  background: #dce9ff;
+  color: #091426;
+  font-weight: 700;
+  box-shadow: inset 3px 0 0 #2563eb;
+}
+
+.account-edit-sidebar-link .material-symbols-outlined {
+  font-size: 18px;
+}
+
+.account-edit-sidebar-footer {
+  margin-top: auto;
+  padding: 18px 20px;
+  border-top: 1px solid #eef1f5;
+  color: #7b8492;
+  font-size: 10px;
+}
+
+/* Content */
+
+.account-edit-content {
+  flex: 1;
+  min-width: 0;
+  padding: 30px;
+}
+
+.account-edit-content-top {
+  margin-bottom: 26px;
+}
+
+.account-edit-page-title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.account-edit-page-description {
+  margin: 8px 0 0;
+  color: #697586;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+/* Form Card */
+
+.account-edit-card {
+  border: 1px solid #e0e6ef;
+  border-radius: 7px;
+  background: #ffffff;
+  box-shadow: 0 3px 12px rgba(9, 20, 38, 0.035);
+}
+
+.account-edit-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 22px;
+  border-bottom: 1px solid #e8edf3;
+}
+
+.account-edit-card-icon {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  background: #eaf1ff;
+  color: #2563eb;
+}
+
+.account-edit-card-icon .material-symbols-outlined {
+  font-size: 22px;
+}
+
+.account-edit-card-header h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.account-edit-card-header p {
+  margin: 3px 0 0;
+  color: #7b8492;
+  font-size: 10px;
+}
+
+/* Form */
+
+.account-edit-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+}
+
+.account-edit-field {
+  padding: 20px 22px;
+  border-bottom: 1px solid #eef1f5;
+}
+
+.account-edit-field:nth-child(odd) {
+  border-right: 1px solid #eef1f5;
+}
+
+.account-edit-field label {
+  display: block;
+  margin-bottom: 8px;
+  color: #7b8492;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.account-edit-field input,
+.account-edit-field select {
+  width: 100%;
+  height: 40px;
+  padding: 0 11px;
+  border: 1px solid #dce2ea;
+  border-radius: 5px;
+  background: #f8fafc;
+  color: #091426;
+  font-family: "Cairo", Arial, sans-serif;
+  font-size: 12px;
+  outline: none;
+}
+
+.account-edit-field input:focus,
+.account-edit-field select:focus {
+  border-color: #2563eb;
+  background: #ffffff;
+}
+
+.account-edit-error {
+  margin: 18px 22px 0;
+  padding: 10px 12px;
+  border: 1px solid #f0caca;
+  border-radius: 5px;
+  background: #fff3f3;
+  color: #a33a3a;
+  font-size: 11px;
+}
+
+.account-edit-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 22px;
+}
+
+.account-edit-cancel-button,
+.account-edit-save-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 38px;
+  padding: 8px 15px;
+  border-radius: 5px;
+  font-family: "Cairo", Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.account-edit-cancel-button {
+  border: 1px solid #d4dae3;
+  background: #ffffff;
+  color: #526074;
+}
+
+.account-edit-save-button {
+  border: 0;
+  background: #091426;
+  color: #ffffff;
+}
+
+.account-edit-save-button:hover {
+  background: #1c2b42;
+}
+
+.account-edit-save-button:disabled,
+.account-edit-cancel-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.account-edit-save-button .material-symbols-outlined {
+  font-size: 17px;
+}
+
+/* State */
+
+.account-edit-state {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  background: #f4f7fb;
+  font-family: "Cairo", Arial, sans-serif;
+}
+
+.account-edit-state-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 35px;
+  border: 1px solid #e0e6ef;
+  border-radius: 8px;
+  background: #ffffff;
+  text-align: center;
+  box-shadow: 0 5px 20px rgba(9, 20, 38, 0.06);
+}
+
+.account-edit-state-card h1 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.account-edit-state-card p {
+  margin: 10px 0 0;
+  color: #697586;
+  font-size: 13px;
+}
+
+/* Arabic */
+
+.account-edit-rtl .account-edit-layout {
+  direction: ltr;
+}
+
+.account-edit-rtl .account-edit-content {
+  direction: rtl;
+  text-align: right;
+}
+
+.account-edit-rtl .account-edit-sidebar {
+  direction: rtl;
+}
+
+.account-edit-rtl .account-edit-sidebar-link {
+  text-align: right;
+}
+
+.account-edit-rtl .account-edit-header {
+  direction: ltr;
+}
+
+.account-edit-rtl .account-edit-header-brand {
+  direction: ltr;
+  text-align: left;
+}
+
+.account-edit-rtl .account-edit-header-actions {
+  direction: ltr;
+}
+
+.account-edit-rtl .account-edit-field:nth-child(odd) {
+  border-right: 0;
+  border-left: 1px solid #eef1f5;
+}
+
+/* Mobile */
+
+.account-edit-mobile-menu {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  .account-edit-header {
+    padding: 0 16px;
+  }
+
+  .account-edit-menu-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 1px solid #536176;
+    border-radius: 5px;
+    background: transparent;
+    color: #ffffff;
+  }
+
+  .account-edit-sidebar {
+    display: none;
+  }
+
+  .account-edit-layout {
+    display: block;
+  }
+
+  .account-edit-content {
+    padding: 20px;
+  }
+
+  .account-edit-mobile-menu {
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+    padding: 12px;
+    background: #ffffff;
+    border-bottom: 1px solid #e1e6ee;
+    box-shadow: 0 6px 16px rgba(9, 20, 38, 0.12);
+    z-index: 99;
+  }
+}
+
+@media (max-width: 600px) {
+  .account-edit-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .account-edit-field:nth-child(odd) {
+    border-right: 0;
+  }
+
+  .account-edit-field:last-child {
+    border-bottom: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .account-edit-header {
+    padding: 0 12px;
+  }
+
+  .account-edit-header-subtitle {
+    display: none;
+  }
+
+  .account-edit-header-actions {
+    gap: 6px;
+  }
+
+  .account-edit-page-title {
+    font-size: 24px;
+  }
+
+  .account-edit-mobile-menu {
+    grid-template-columns: 1fr;
+  }
+}

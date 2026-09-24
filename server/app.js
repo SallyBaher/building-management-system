@@ -3,6 +3,7 @@ import cors from "cors";
 import authRoutes from "./routes/authRoutes.js";
 import setupRoutes from "./routes/setupRoutes.js";
 import floorRoutes from "./routes/floorRoutes.js";
+import accountRoutes from "./routes/accountRoutes.js";
 import buildingRoutes from "./routes/buildingRoutes.js";
 import errorHandler from "./middleware/errorHandler.js";
 import notFound from "./middleware/notFound.js";
@@ -22,6 +23,7 @@ app.use("/auth", authRoutes);
 app.use("/setup", setupRoutes);
 app.use("/floors", floorRoutes);
 app.use("/building", buildingRoutes);
+app.use("/accounts", accountRoutes);
 app.put("/test-update-route", (req, res) => {
   res.json({
     message: "PUT route is working"

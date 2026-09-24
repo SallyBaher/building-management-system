@@ -351,7 +351,7 @@
 .building-edit-grid label {
   display: flex;
   flex-direction: column;
-  gap: 7px;
+  gap: 4px;
   color: #5d6d83;
   font-size: 12px;
   font-weight: 500;
@@ -587,10 +587,12 @@
     padding: 20px;
   }
 
-  .building-edit-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
+ .building-edit-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 24px;
+  row-gap: 40px;
+}
 
   .building-edit-actions {
     justify-content: stretch;
