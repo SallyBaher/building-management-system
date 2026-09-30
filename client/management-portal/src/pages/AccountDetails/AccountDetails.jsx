@@ -107,7 +107,7 @@ function AccountDetails() {
         }
 
         const response = await fetch(
-          `http://backend-production-b205a.up.railway.app/accounts/${accountId}`,
+          `https://backend-production-b205a.up.railway.app/accounts/${accountId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

@@ -138,7 +138,7 @@ function AccountCreate() {
       }
 
       const response = await fetch(
-        "http://backend-production-b205a.up.railway.app/accounts",
+        "https://backend-production-b205a.up.railway.app/accounts",
         {
           method: "POST",
           headers: {

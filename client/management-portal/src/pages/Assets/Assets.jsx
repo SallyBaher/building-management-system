@@ -128,7 +128,7 @@ entries: "أصول",
         }
 
         const response = await fetch(
-          "http://backend-production-b205a.up.railway.app/assets",
+          "https://backend-production-b205a.up.railway.app/assets",
           {
             headers: {
               Authorization: `Bearer ${token}`,

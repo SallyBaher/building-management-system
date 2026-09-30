@@ -130,7 +130,7 @@ function BuildingInformation() {
           return;
         }
 
-        const response = await fetch("http://backend-production-b205a.up.railway.app/building", {
+        const response = await fetch("https://backend-production-b205a.up.railway.app/building", {
           headers: {
             Authorization: `Bearer ${token}`
           }

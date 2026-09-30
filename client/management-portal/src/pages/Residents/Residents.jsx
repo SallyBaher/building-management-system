@@ -149,7 +149,7 @@ function Residents() {
           return;
         }
 
-        const response = await fetch("http://backend-production-b205a.up.railway.app/accounts", {
+        const response = await fetch("https://backend-production-b205a.up.railway.app/accounts", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
