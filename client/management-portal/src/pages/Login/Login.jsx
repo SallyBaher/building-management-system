@@ -65,7 +65,7 @@ function Login() {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/auth/login",
+        "http://backend-production-b205a.up.railway.app/auth/login",
         {
           method: "POST",
           headers: {

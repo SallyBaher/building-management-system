@@ -114,7 +114,7 @@ function BuildingEdit() {
       try {
         const token = localStorage.getItem("token");
 
-        const response = await fetch("http://localhost:5000/building", {
+        const response = await fetch("http://backend-production-b205a.up.railway.app/building", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -172,7 +172,7 @@ async function handleSubmit(event) {
   try {
     const token = localStorage.getItem("token");
 
-    const response = await fetch("http://localhost:5000/building", {
+    const response = await fetch("http://backend-production-b205a.up.railway.app/building", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

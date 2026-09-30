@@ -133,7 +133,7 @@ function AccountEdit() {
         }
 
         const response = await fetch(
-          `http://localhost:5000/accounts/${accountId}`,
+          `http://backend-production-b205a.up.railway.app/accounts/${accountId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -214,7 +214,7 @@ function AccountEdit() {
       }
 
       const response = await fetch(
-        `http://localhost:5000/accounts/${accountId}`,
+        `http://backend-production-b205a.up.railway.app/accounts/${accountId}`,
         {
           method: "PUT",
           headers: {
