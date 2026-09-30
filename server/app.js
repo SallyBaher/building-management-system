@@ -7,6 +7,7 @@ import accountRoutes from "./routes/accountRoutes.js";
 import buildingRoutes from "./routes/buildingRoutes.js";
 import errorHandler from "./middleware/errorHandler.js";
 import notFound from "./middleware/notFound.js";
+import assetRoutes from "./routes/assetRoutes.js";
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use("/setup", setupRoutes);
 app.use("/floors", floorRoutes);
 app.use("/building", buildingRoutes);
 app.use("/accounts", accountRoutes);
+app.use("/assets", assetRoutes);
 app.put("/test-update-route", (req, res) => {
   res.json({
     message: "PUT route is working"
