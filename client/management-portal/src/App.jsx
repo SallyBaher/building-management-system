@@ -8,6 +8,8 @@ import Residents from "./pages/Residents/Residents";
 import AccountDetails from "./pages/AccountDetails/AccountDetails";
 import AccountEdit from "./pages/AccountEdit/AccountEdit";
 import AccountCreate from "./pages/AccountCreate/AccountCreate";
+import Assets from "./pages/Assets/Assets";
+import AssetCreate from "./pages/AssetCreate/AssetCreate.jsx";
 
 function App() {
   return (
@@ -51,6 +53,14 @@ function App() {
   path="/account/create"
   element={<AccountCreate />}
 />
+
+<Route 
+  path="/assets" 
+  element={<Assets />} />
+
+<Route 
+  path="/asset/create" 
+  element={<AssetCreate />} />
 
       </Routes>
     </BrowserRouter>

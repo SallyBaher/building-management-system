@@ -27,6 +27,7 @@ function BuildingInformation() {
       maintenance: "Maintenance",
       finance: "Finance",
       residents: "Residents",
+      assets: "Assets",
       communication: "Communication",
       settings: "Settings",
       logout: "Logout",
@@ -72,6 +73,7 @@ function BuildingInformation() {
       maintenance: "الصيانة",
       finance: "المالية",
       residents: "السكان",
+      assets: "الأصول",
       communication: "التواصل",
       settings: "الإعدادات",
       logout: "تسجيل الخروج",
@@ -323,29 +325,40 @@ function BuildingInformation() {
         {currentText.finance}
       </button>
 
-      <button
-        type="button"
-        className="building-sidebar-link"
-        onClick={() => setIsMenuOpen(false)}
-      >
-        <span className="material-symbols-outlined">
-          groups
-        </span>
+     <button
+  type="button"
+  className="building-sidebar-link"
+  onClick={() => navigate("/residents")}
+>
+  <span className="material-symbols-outlined">
+    groups
+  </span>
 
-        {currentText.residents}
-      </button>
+  {currentText.residents}
+</button>
 
-      <button
-        type="button"
-        className="building-sidebar-link"
-        onClick={() => setIsMenuOpen(false)}
-      >
-        <span className="material-symbols-outlined">
-          chat
-        </span>
+<button
+  type="button"
+  className="building-sidebar-link"
+  onClick={() => navigate("/assets")}
+>
+  <span className="material-symbols-outlined">
+    precision_manufacturing
+  </span>
 
-        {currentText.communication}
-      </button>
+  {currentText.assets}
+</button>
+
+<button
+  type="button"
+  className="building-sidebar-link"
+>
+  <span className="material-symbols-outlined">
+    chat
+  </span>
+
+  {currentText.communication}
+</button>
     </nav>
   )}
 </header>

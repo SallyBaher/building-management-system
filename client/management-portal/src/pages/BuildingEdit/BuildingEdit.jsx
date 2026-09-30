@@ -436,6 +436,21 @@ async function handleSubmit(event) {
             </button>
 
             <button
+  type="button"
+  className="building-edit-sidebar-link"
+  onClick={() => {
+    setIsMenuOpen(false);
+    navigate("/assets");
+  }}
+>
+  <span className="material-symbols-outlined">
+    precision_manufacturing
+  </span>
+
+  {currentText.assets}
+</button>
+
+            <button
               type="button"
               className="building-edit-sidebar-link"
             >
